@@ -15,7 +15,7 @@ void setup()
     pinMode(DE_RE_PIN, OUTPUT);
     digitalWrite(DE_RE_PIN , HIGH);
     pinMode(LED_PIN , OUTPUT);
-    digitalWrite(LED_PIn , HIGH);
+    digitalWrite(LED_PIN , HIGH);
 
     Serial.println("Welcome....\n");
     Serial.println("Sender Start\n");

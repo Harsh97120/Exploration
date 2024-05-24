@@ -13,7 +13,7 @@ void setup()
     pinMode(DE_RE_PIN, OUTPUT);
     digitalWrite(DE_RE_PIN, LOW);
     pinMode(LED_PIN, OUTPUT);
-    diGItalWrite(LED_PIN, HIGH);
+    digitalWrite(LED_PIN, HIGH);
 
     Serial.println("Welcome to receiver.\n\n\n");
 }
