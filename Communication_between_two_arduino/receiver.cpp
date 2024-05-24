@@ -1,7 +1,7 @@
 #include <SoftwareSerial.h>
 
 byte TX_PIN = 4 , RX_PIN = 5 ;
-byte DE_RE_PIN = 16 , LED_PIN = 2 ;
+byte DE_RE_PIN = 13 , LED_PIN = 2 ;
 
 SoftwareSerial Soft_Serial(RX_PIN, TX_PIN);
 
