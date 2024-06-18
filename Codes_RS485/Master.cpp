@@ -50,7 +50,6 @@ long Read_Data()
         node.begin(SlaveID[i], sf);
 
         uint8_t result;
-        //long answer = 0;
 
         byte dataReadLength = 1;
 
