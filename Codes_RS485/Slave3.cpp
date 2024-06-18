@@ -6,8 +6,7 @@
 const int RX = 4;
 const int TX = 5;
 const int DE_RE_PIN = 16;
-//const uint16_t SDA = 21;
-//const uint16_t SCL = 22;
+
 
 SoftwareSerial Soft_Serial(RX, TX);
 Adafruit_INA219 ina219 ;
