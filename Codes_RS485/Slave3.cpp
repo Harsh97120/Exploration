@@ -12,7 +12,7 @@ SoftwareSerial Soft_Serial(RX, TX);
 Adafruit_INA219 ina219 ;
 
 byte inLen, _inBuff[8] = {0}, outLen, _outBuff[9] = {0};
-byte slaveID = 0x02, functionCode = 0x03;
+byte slaveID = 0x03, functionCode = 0x03;
 
 unsigned long CurrentMillis, PreviousMillis, Timeout = (unsigned long)10;
 
