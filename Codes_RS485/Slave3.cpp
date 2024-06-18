@@ -1,6 +1,5 @@
 #include <SoftwareSerial.h>
 #include <Adafruit_INA219.h>
-<<<<<<< HEAD
 #include <Wire.h>
 
 
@@ -11,16 +10,6 @@ const int DE_RE_PIN = 16;
 //const uint16_t SCL = 22;
 
 SoftwareSerial Soft_Serial(RX, TX);
-=======
-
-const int RX = 4;
-const int TX = 5;
-const int DE_RE = 16;
-const int SDA = 21;
-const int SCL = 22;
-
-SoftwareSerial sf(RX, TX);
->>>>>>> 9d2f8607f6ec70909aa98ac86f41361ed7cb164b
 Adafruit_INA219 ina219 ;
 
 byte inLen, _inBuff[8] = {0}, outLen, _outBuff[9] = {0};
@@ -31,7 +20,6 @@ unsigned long CurrentMillis, PreviousMillis, Timeout = (unsigned long)10;
 void setup()
 {
     Serial.begin(115200);
-<<<<<<< HEAD
     Soft_Serial.begin(9600);
     Soft_Serial.flush(); // flush transmit buffer
 
@@ -39,15 +27,6 @@ void setup()
     digitalWrite(DE_RE_PIN , LOW); 
 
     //Wire.begin(SDA ,SCL);
-=======
-    sf.begin(9600);
-    sf.flush(); // flush transmit buffer
-
-    pinMode(DE_RE , OUTPUT);   
-    digitalWrite(DE_RE , LOW); 
-
-    Wire.begin(SDA ,SCL);
->>>>>>> 9d2f8607f6ec70909aa98ac86f41361ed7cb164b
     
     Serial.println("Slave 0x" + String(slaveID, HEX) + " Start\n");
 
@@ -68,11 +47,7 @@ void loop()
 
     while (Soft_Serial.available() > 0)
     {
-<<<<<<< HEAD
         byte temp = Soft_Serial.read();
-=======
-        byte temp = sf.read();
->>>>>>> 9d2f8607f6ec70909aa98ac86f41361ed7cb164b
         Serial.println("Request[" + String(inLen) + "]: " + String(temp, DEC) + " " + String(temp, HEX));
         _inBuff[inLen] = temp;
         inLen++;
@@ -89,11 +64,7 @@ void loop()
         {
             Serial.println("Address Not OK: 0x" + String(unitAddr, HEX));
             inLen = 0;
-<<<<<<< HEAD
             Soft_Serial.flush(); // flush transmit buffer
-=======
-            sf.flush(); // flush transmit buffer
->>>>>>> 9d2f8607f6ec70909aa98ac86f41361ed7cb164b
             return;
         }
         Serial.println("Address OK: 0x" + String(unitAddr, HEX));
@@ -102,11 +73,7 @@ void loop()
         {
             Serial.println("Function Code Not OK: 0x" + String(function, HEX));
             inLen = 0;
-<<<<<<< HEAD
             Soft_Serial.flush(); // flush transmit buffer
-=======
-            sf.flush(); // flush transmit buffer
->>>>>>> 9d2f8607f6ec70909aa98ac86f41361ed7cb164b
             return;
         }
 
@@ -131,31 +98,19 @@ void loop()
         }
         Serial.println("CRC OK: 0x" + String(u16CRC, HEX));
 
-<<<<<<< HEAD
         digitalWrite(DE_RE_PIN, HIGH); 
         Soft_Serial.flush();          
         inLen = 0;
 
         uint16_t busvoltage = ina219.getBusVoltage_V();
         uint16_t current = ina219.getCurrent_mA();
-=======
-        digitalWrite(DE_RE, HIGH); 
-        sf.flush();          
-        inLen = 0;
-
-        float busvoltage = in219.getBusVoltage_V();
-        float current = ina219.getCurrent_mA();
->>>>>>> 9d2f8607f6ec70909aa98ac86f41361ed7cb164b
         
         Serial.println("\nVoltage: " + String(busvoltage) + " 0x" + String(busvoltage, HEX) + "\n\n");
         Serial.println("\nCurrent: " + String(current) + " 0x" + String(current, HEX) + "\n\n");
         
 
         outLen = 4;
-<<<<<<< HEAD
         
-=======
->>>>>>> 9d2f8607f6ec70909aa98ac86f41361ed7cb164b
         _outBuff[0] = slaveID;
         _outBuff[1] = functionCode;
         _outBuff[2] = outLen;
