@@ -48,7 +48,7 @@ void loop()
     {
         Serial.println("\ninLen = " + String(inLen));
 
-        byte uintAddr = _inBuff[0];
+        byte uintAddr = _inbuff[0];
         byte function = _inbuff[1];
 
         if (uintAddr != slaveID)
@@ -77,13 +77,13 @@ void loop()
 
         for (byte i = 0; i < inLen - 2; i++)
         {
-            u16CRC = crc16_update(u16CRC, _inBuff[i]);
+            u16CRC = crc16_update(u16CRC, _inbuff[i]);
         }
 
         crc[0] = lowByte(u16CRC);
         crc[1] = highByte(u16CRC);
 
-        if (_inBuff[inLen - 2] != crc[0] || _inBuff[inLen - 1] != crc[1])
+        if (_inbuff[inLen - 2] != crc[0] || _inbuff[inLen - 1] != crc[1])
         {
             Serial.println("CRC Not OK: 0x" + String(u16CRC, HEX));
             inLen = 0;
@@ -102,7 +102,6 @@ void loop()
         float temperature = dht.readTemperature();
 
         Serial.println("\nHumidity: " + String(humidity) + "0x" + String(humidity, HEX) + "\n\n");
-
         Serial.println("\nTemperature: " + String(temperature) + "0x" + String(temperature, HEX) + "\n\n");
 
         if (isnan(humidity) || isnan(temperature))
@@ -116,29 +115,29 @@ void loop()
         _outbuff[0] = slaveID;
         _outbuff[1] = functionCode;
         _outbuff[2] = outLen;
-        _outbuff[3] = highByte(temperature);
-        _outbuff[4] = lowByte(temperature);
-        _outbuff[5] = highByte(humidity);
-        _outbuff[6] = lowByte(humidity);
+        _outbuff[3] = highByte((int)temperature);
+        _outbuff[4] = lowByte((int)temperature);
+        _outbuff[5] = highByte((int)humidity);
+        _outbuff[6] = lowByte((int)humidity);
 
         u16CRC = 0xFFFF;
 
         for (byte i = 0; i < 5; i++)
         {
-            u16CRC = crc16_update(u16CRC, outbuff[i]);
+            u16CRC = crc16_update(u16CRC, _outbuff[i]);
         }
 
         _outbuff[7] = lowByte(u16CRC);
         _outbuff[8] = highByte(u16CRC);
 
-        Soft_Serial.write(_outbuff, sizeof(_outbuff));
+        sf.write(_outbuff, sizeof(_outbuff));
         Serial.println("\n");
     }
     else if (inLen > 0)
     {
         CurrentMillis = millis();
 
-        if (CurrentMillis - PreviosMillis > Timeout)
+        if (CurrentMillis - PreviousMillis > Timeout)
         {
             PreviousMillis = CurrentMillis;
             inLen = 0;

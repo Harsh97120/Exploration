@@ -45,7 +45,8 @@ void loop()
 
 long Read_Data()
 {
-    for (byte i = 0, byte index_for_val = 0; index_for_val < 4, i < 3; i++)
+    byte i = 0, index_for_val = 0 ;
+    for (; index_for_val < 4, i < 3; i++)
     {
         node.begin(SlaveID[i], sf);
 
@@ -60,7 +61,7 @@ long Read_Data()
 
         uint16_t data[dataReadLength];
 
-        result = node.readHoldingRegisters(Reg_Addr, dataReadLength);
+        result = node.readHoldingRegisters(Reg_Address, dataReadLength);
 
         if (result == node.ku8MBSuccess)
         {
@@ -86,7 +87,7 @@ long Read_Data()
         }
         else
         {
-            Serial.println("Connect modbus fail. SlaveID: 0x" + String(SlaveID[i], HEX) + " and Register: 0x" + String(Reg_Addr, HEX));
+            Serial.println("Connect modbus fail. SlaveID: 0x" + String(SlaveID[i], HEX) + " and Register: 0x" + String(Reg_Address, HEX));
             delay(100);
         }
     }
@@ -95,16 +96,16 @@ long Read_Data()
 void Print_Data()
 {
     Serial.println("Temperature: ");
-    Serial.print(value[0]);
+    Serial.print(values[0]);
 
     Serial.println("\nHumidity: ");
-    Serial.print(value[1]);
+    Serial.print(values[1]);
 
     Serial.println("\nPressure: ");
-    Serial.print(value[2]);
+    Serial.print(values[2]);
 
     Serial.println("\nCurrent: ");
-    Serial.print(value[3]);
+    Serial.print(values[3]);
 }
 
 int hexToDec(String hexString)

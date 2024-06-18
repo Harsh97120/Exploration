@@ -1,5 +1,7 @@
 #include <SoftwareSerial.h>
 #include <Wire.h>
+#include <SPI.h>
+
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BMP280.h>
 
@@ -7,8 +9,11 @@ const int RX = 4;
 const int TX = 5;
 const int DE_RE = 16;
 
-const int I2C_SDA = 21;
-const int I2C_SCL = 22;
+
+const int BMP_SCK = 13;
+const int BMP_MISO = 12;
+const int BMP_MOSI = 11;
+const int BMP_CS = 10;
 
 SoftwareSerial sf(RX, TX);
 Adafruit_BMP280 bmp;
@@ -24,8 +29,6 @@ void setup()
     sf.begin(9600);
     sf.flush();
 
-    Wire.begin(I2C_SDA, I2C_SCL);
-
     pinMode(DE_RE, OUTPUT);
     digitalWrite(DE_RE, LOW);
 
@@ -34,9 +37,10 @@ void setup()
     if (!bmp.begin(0x76))
     {
         Serial.println("Could not find a valid BMP280 sensor , check wiring.");
-        while (1)
-            ;
+        while (1) ;
     }
+    
+    bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,Adafruit_BMP280::SAMPLING_X2,Adafruit_BMP280::SAMPLING_X16,Adafruit_BMP280::FILTER_X16,Adafruit_BMP280::STANDBY_MS_500);
 }
 
 void loop()
@@ -46,7 +50,7 @@ void loop()
     while (sf.available() > 0)
     {
         byte temp = sf.read();
-        Serial.println("Request[" + String(inlen) + "]: " + Strinh(temp, DEC) + " " + String(temp, HEX));
+        Serial.println("Request[" + String(inlen) + "]: " + String(temp, DEC) + " " + String(temp, HEX));
         _inbuff[inlen] = temp;
         inlen++;
         PreviousMillis = millis();
@@ -56,13 +60,13 @@ void loop()
     {
         Serial.println("\ninlen = " + String(inlen));
 
-        byte unitAddr = _inbuff[0];
+        byte uintAddr = _inbuff[0];
         byte function = _inbuff[1];
 
-        if (unitAddr != slaveid)
+        if (uintAddr != slaveid)
         {
             Serial.println("Address Not ok: 0x" + String(uintAddr, HEX));
-            inLen = 0;
+            inlen = 0;
             sf.flush();
             return;
         }
@@ -108,7 +112,7 @@ void loop()
         sf.flush();
         inlen = 0;
 
-        float pressure = bmp.readPressure();
+        uint16_t pressure = bmp.readPressure();
 
         Serial.println("\nPressure = " + String(pressure) + " 0x" + String(pressure, HEX) + "\n\n");
 
@@ -137,7 +141,7 @@ void loop()
     {
         CurrentMillis = millis();
 
-        if (CurrentMilli - PreviouMillis > Timeout)
+        if (CurrentMillis - PreviousMillis > Timeout)
         {
             PreviousMillis = CurrentMillis;
             inlen = 0;
