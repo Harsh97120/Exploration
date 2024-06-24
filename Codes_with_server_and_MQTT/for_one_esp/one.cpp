@@ -139,17 +139,17 @@ void loop()
         mqtt_publish((char *)pkt2.c_str());
 
         String pkt3 = "{";
-        pkt2 += "\"device_id\": \"" + device_id + "\", ";
-        pkt2 += "\"type\": \"Pressure\", ";
-        pkt2 += "\"value\": " + String(pressure) + "";
-        pkt2 += "}";
+        pkt3 += "\"device_id\": \"" + device_id + "\", ";
+        pkt3 += "\"type\": \"Pressure\", ";
+        pkt3 += "\"value\": " + String(pressure) + "";
+        pkt3 += "}";
         mqtt_publish((char *)pkt3.c_str());
 
         String pkt4 = "{";
-        pkt2 += "\"device_id\": \"" + device_id + "\", ";
-        pkt2 += "\"type\": \"voltage\", ";
-        pkt2 += "\"value\": " + String(voltage) + "";
-        pkt2 += "}";
+        pkt4 += "\"device_id\": \"" + device_id + "\", ";
+        pkt4 += "\"type\": \"voltage\", ";
+        pkt4 += "\"value\": " + String(voltage) + "";
+        pkt4 += "}";
         mqtt_publish((char *)pkt4.c_str());
     }
 
