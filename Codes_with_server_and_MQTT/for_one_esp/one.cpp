@@ -5,11 +5,11 @@
 #include <Wire.h>
 #include <Adafruit_INA219.h>
 #include <ModbusRTU.h>
-#include <Wifi.h>
+#include <WiFi.h>
 #include <ArduinoJson.h>
-#include <ESP8266HTTPClient.h>
+#include <PubSubClient.h>
 
-// Wifi
+// WiFi
 
 const char *ssid = "Your SSID";
 const char *password = "Your Password";
@@ -30,11 +30,9 @@ bool read_success = true;
 #define DHTTYPE DHT22
 DHT_Unified dht(DHTPIN, DHTTYPE);
 
-WifiClient esp_client;
-void callback(char *topic, bye *payload, unsigned int length);
+WiFiClient esp_client;
+void callback(char *topic, byte *payload, unsigned int length);
 PubSubClient mqtt_client(mqtt_server, mqtt_port, callback, esp_client);
-
-HTTPClient http;
 
 // Define I2C addresses
 Adafruit_BMP280 bmp;    // I2C
@@ -56,7 +54,6 @@ void setup()
     Wire.begin();
     Serial.println("\nWelcome to IoT project.\n");
     setup_wifi();
-    get_lastEvent();
     mqtt_connect();
 
     // Initialize DHT22 sensor
@@ -176,26 +173,26 @@ void setup_wifi()
 {
     Serial.println();
     Serial.println("Connecting to ");
-    Serial.println("\"" + String(ssid) + "\"");
+    //Serial.println("\"" + String(ssid) + "\"");
 
-    Wifi.begin(ssid, password);
+    WiFi.begin(ssid, password);
 
     while (WiFi.status() != WL_CONNECTED)
     {
-        dealy(500);
-        Serial.print(".");
+        delay(500);
+        //Serial.print(".");
     }
 
-    Serial.println("\nWifi connected");
+    //Serial.println("\nWiFi connected");
 }
 
 void mqtt_connect()
 {
     while (!mqtt_client.connected())
     {
-        Serial.println("Attempting MQTT connection..");
+        //Serial.println("Attempting MQTT connection..");
 
-        if (mqtt_client.connect(mqtt_clienntId))
+        if (mqtt_client.connect(mqtt_clientId))
         {
             Serial.println("MQTT Client connected");
 
@@ -205,7 +202,7 @@ void mqtt_connect()
         {
             Serial.print("Failed , rc=");
             Serial.print(mqtt_client.state());
-            Serial.println(" try again in 5 seconds");
+            //Serial.println(" try again in 5 seconds");
 
             delay(5000);
         }
@@ -236,4 +233,26 @@ void mqtt_publish(char *data)
     {
         Serial.println("Publish \"" + String(data) + "\" failed");
     }
+}
+
+void callback(char *topic, byte *payload, unsigned int length)
+{
+  String command;
+  Serial.print("\n\nMessage arrived [");
+  Serial.print(topic);
+  Serial.println("] ");
+  for (int i = 0; i < length; i++)
+    command += (char)payload[i];
+
+  if (command.length() > 0)
+    Serial.println("Command receive is : " + command);
+
+  DynamicJsonDocument doc(1024);
+  deserializeJson(doc, command);
+  JsonObject obj = doc.as<JsonObject>();
+
+  String id = obj[String("device_id")];
+  String type = obj[String("type")];
+  String value = obj[String("value")];
+
 }
