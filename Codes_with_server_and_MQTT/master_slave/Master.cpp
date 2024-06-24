@@ -10,7 +10,7 @@ const char *password = "Your Password";
 
 // MQTT Broker Details
 String device_id = "Device0001";
-const char *mqtt_server = "broker.hivemq.com";
+const char *mqtt_server = "mqtt://localhost:1883";
 const int mqtt_port = 1883;
 const char *mqtt_user = "Device0001";
 const char *mqtt_password = "Device0001";
@@ -22,9 +22,9 @@ WiFiClient esp_client;
 void callback(char *topic, byte *payload, unsigned int length);
 PubSubClient mqtt_client(mqtt_server, mqtt_port, callback, esp_client);
 
-const int RX = 4;
-const int TX = 5;
-const int DE_RE = 16;
+#define RX 4
+#define TX 5
+#define DE_RE 16
 
 SoftwareSerial sf(RX, TX);
 
