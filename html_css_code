@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            /* background: linear-gradient(135deg, #ffcc33, #ff6699, #66ccff, #66ff66); */
+            background-color:rgb(83, 158, 208);
+            background-size: 400% 400%;
+            /* animation: gradientBG 15s ease infinite; */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .section {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            flex: 1;
+            text-align: center;
+        }
+
+        .section h2 {
+            margin: 0;
+            font-size: 1.5em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section p {
+            margin: 10px 0 0;
+            font-size: 1.2em;
+        }
+
+        .icon {
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="section">
+                <h2>
+                    <img src="https://img.icons8.com/fluency/48/000000/temperature.png" alt="Temperature Icon" class="icon"> 
+                    Temperature
+                </h2>
+                <p>25°C</p>
+            </div>
+            <div class="section">
+                <h2>
+                    <img src="https://img.icons8.com/fluency/48/000000/hygrometer.png" alt="Humidity Icon" class="icon"> 
+                    Humidity
+                </h2>
+                <p>60%</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="section">
+                <h2>
+                    <img src="https://img.icons8.com/fluency/48/000000/air-quality.png" alt="Air Quality Icon" class="icon"> 
+                    Air Quality
+                </h2>
+                <p>Good</p>
+            </div>
+            <div class="section">
+                <h2>
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/pressure.png" alt="Pressure Icon" class="icon"> 
+                    Pressure
+                </h2>
+                <p>1013 hPa</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
