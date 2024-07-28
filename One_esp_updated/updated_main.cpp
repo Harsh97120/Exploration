@@ -22,8 +22,8 @@ const char* topicSubscribe="Exploration-G-6";
 
 WiFiClient espClient;
 
-void callback(char *topic,byte *payload,unsigned int length);
-PubSubClient mqttClient(mqttServer, mqttPort, callback, espClient);
+// void callback(char *topic,byte *payload,unsigned int length);
+PubSubClient mqttClient(mqttServer, mqttPort, espClient);
 
 Adafruit_BMP280 bmp;
 
@@ -87,7 +87,7 @@ void loop(){
 
   publishSensorData(temperature, humidity, pressure, current, gas);
 
-  if(!mqtt_client.loop()){
+  if(!mqttClient.loop()){
     mqtt_connect();
   }
 
@@ -145,12 +145,12 @@ void mqtt_subscribe(const char*topic){
   if(mqttClient.subscribe(topic)){
     Serial.println("Subscribe \"" + String(topic) + "\" Ok");
   }else {
-    Serial.println(Subscribe \"" + String(topic) + "\" Failed!");
+    Serial.println("Subscribe \"" + String(topic) + "\" Failed!");
   }
 }
 
 void publishSensorData(float temperature, float humidity, float pressure, float current,float gas){
-  DunamicJsonDocument doc(1024);
+  DynamicJsonDocument doc(1024);
   doc["device_id"]=deviceId;
 
   JsonObject data=doc.createNestedObject("data");
