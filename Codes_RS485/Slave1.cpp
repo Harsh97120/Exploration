@@ -11,7 +11,7 @@ const char *DHT_TYPE = DHT22;
 SoftwareSerial sf(RX, TX);
 DHT dht(DHT_PIN, DHT_TYPE);
 
-byte inLen, _inbuff[9] = {0}, outLen, _outbuff[9] = {0};
+byte inLen=0, _inbuff[9] = {0}, outLen, _outbuff[9] = {0};
 byte slaveID = 0x01, functionCode = 0x03;
 
 unsigned long CurrentMillis, PreviousMillis, Timeout = (unsigned long)10;
