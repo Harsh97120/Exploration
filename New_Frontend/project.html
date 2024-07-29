@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(83, 158, 208);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .section {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: calc(50% - 20px);
+        }
+
+        .section h2 {
+            margin: 0;
+            font-size: 1.5em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section p {
+            margin: 10px 0 0;
+            font-size: 1.2em;
+        }
+
+        .icon {
+            width: 30px;
+            height: 30px;
+        }
+
+        .error {
+            color: red;
+            font-size: 1em;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="section">
+                <h2>
+                    <img src="https://img.icons8.com/fluency/48/000000/temperature.png" alt="Temperature Icon" class="icon"> 
+                    Temperature
+                </h2>
+                <p id="temperature">-- °C</p>
+            </div>
+            <div class="section">
+                <h2>
+                    <img src="https://img.icons8.com/fluency/48/000000/hygrometer.png" alt="Humidity Icon" class="icon"> 
+                    Humidity
+                </h2>
+                <p id="humidity">-- %</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="section">
+                <h2>
+                    <img src="https://img.icons8.com/fluency/48/000000/air-quality.png" alt="Air Quality Icon" class="icon"> 
+                    Air Quality
+                </h2>
+                <p id="airQuality">--</p>
+            </div>
+            <div class="section">
+                <h2>
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/pressure.png" alt="Pressure Icon" class="icon"> 
+                    Pressure
+                </h2>
+                <p id="pressure">-- hPa</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="section">
+                <h2>
+                    <img src="https://img.icons8.com/fluency/48/000000/electricity.png" alt="Current Sensor Icon" class="icon">
+                    Current
+                </h2>
+                <p id="current">-- A</p>
+            </div>
+        </div>
+        <div id="error" class="error"></div>
+    </div>
+
+    <script>
+        // Replace with your MQTT broker address and topic
+        const mqttBroker = 'wss://your-mqtt-broker:port'; // Use 'wss' for secure connection
+        const topic = 'sensor/data';
+
+        // Connect to the MQTT broker
+        const client = mqtt.connect(mqttBroker);
+
+        client.on('connect', () => {
+            console.log('Connected to MQTT broker');
+            document.getElementById('error').textContent = ''; // Clear any previous error
+            client.subscribe(topic, (err) => {
+                if (!err) {
+                    console.log('Subscribed to topic', topic);
+                } else {
+                    console.error('Subscription error:', err);
+                    document.getElementById('error').textContent = 'Failed to subscribe to topic';
+                }
+            });
+        });
+
+        client.on('message', (topic, message) => {
+            try {
+                const data = JSON.parse(message.toString());
+                document.getElementById('temperature').textContent = data.temperature + ' °C';
+                document.getElementById('humidity').textContent = data.humidity + ' %';
+                document.getElementById('airQuality').textContent = data.airQuality;
+                document.getElementById('pressure').textContent = data.pressure + ' hPa';
+                document.getElementById('current').textContent = data.current + ' A';
+            } catch (err) {
+                console.error('Message handling error:', err);
+                document.getElementById('error').textContent = 'Error processing message data';
+            }
+        });
+
+        client.on('error', (err) => {
+            console.error('MQTT Error:', err);
+            document.getElementById('error').textContent = 'MQTT connection error';
+        });
+    </script>
+</body>
+</html>
