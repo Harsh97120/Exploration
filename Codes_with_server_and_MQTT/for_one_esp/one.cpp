@@ -22,8 +22,8 @@ const int mqtt_port = 1883;
 const char *mqtt_user = "Device0001";
 const char *mqtt_password = "Device0001";
 const char *mqtt_clientId = "Deivce_Device0001";
-const char *topic_publish = "JPLearning_SensorData";
-const char *topic_subscribe = "JPLearning_CommandRequest";
+const char *topic_publish = "G6_SensorData";
+const char *topic_subscribe = "G6_CommandRequest";
 bool read_success = true;
 
 #define DHTPIN 4
