@@ -23,7 +23,8 @@ void setup()
 void loop()
 {
     mb.task(); 
-    mb.addHreg(HREG,write_value);
+    mb.Hreg(HREG,write_value);
+    
 
     delay(1000);
 }
